@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SetClassify - Matematika Diskrit</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- CUSTOM MOUSE POINTER FOLLOWER -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-outline" id="cursorOutline"></div>
+
+<div class="app">
+
+    <!-- SIDEBAR DENGAN FITUR COLLAPSE & SUB-DESKRIPSI MENU -->
+    <aside class="sidebar" id="sidebar">
+        <div class="logo">
+            <div class="logo-icon">S</div>
+            <div class="logo-text">
+                <h2>SetClassify</h2>
+                <small>Logic & Set System</small>
+            </div>
+            <!-- TOMBOL CIUTKAN SIDEBAR -->
+            <button class="sidebar-toggle-btn" id="sidebarToggleBtn" onclick="toggleSidebar()" title="Ciutkan / Perluas Sidebar">
+                ◀
+            </button>
+        </div>
+
+        <nav>
+            <button class="nav-item active" data-page="dashboard" title="Dashboard - Ringkasan & Statistik Data">
+                <span class="nav-icon">🏠</span>
+                <div class="nav-text">
+                    <b>Dashboard</b>
+                    <small>Ringkasan & statistik data</small>
+                </div>
+            </button>
+
+            <button class="nav-item" data-page="data" title="Data Utama - Kelola Atribut & Semesta">
+                <span class="nav-icon">👥</span>
+                <div class="nav-text">
+                    <b>Data Utama</b>
+                    <small>Kelola atribut & semesta</small>
+                </div>
+            </button>
+
+            <button class="nav-item" data-page="sets" title="Himpunan & Operasi - Klasifikasi & Operasi Diskrit">
+                <span class="nav-icon">◉</span>
+                <div class="nav-text">
+                    <b>Himpunan & Operasi</b>
+                    <small>Klasifikasi & operasi diskrit</small>
+                </div>
+            </button>
+
+            <button class="nav-item" data-page="venn" title="Diagram Venn - Visualisasi Interaktif Himpunan">
+                <span class="nav-icon">◯</span>
+                <div class="nav-text">
+                    <b>Diagram Venn</b>
+                    <small>Visualisasi interaktif himpunan</small>
+                </div>
+            </button>
+
+            <button class="nav-item" data-page="pie" title="Inklusi – Eksklusi (PIE) - Kalkulator Kardinalitas PIE">
+                <span class="nav-icon">∑</span>
+                <div class="nav-text">
+                    <b>Inklusi–Eksklusi (PIE)</b>
+                    <small>Kalkulator kardinalitas PIE</small>
+                </div>
+            </button>
+
+            <button class="nav-item" data-page="history" title="Riwayat Kalkulasi - Log Aktivitas & Perhitungan">
+                <span class="nav-icon">📜</span>
+                <div class="nav-text">
+                    <b>Riwayat Kalkulasi</b>
+                    <small>Log aktivitas & perhitungan</small>
+                </div>
+            </button>
+
+            <button class="nav-item" data-page="guide" title="Panduan - Petunjuk & Alur Quick Start">
+                <span class="nav-icon">📖</span>
+                <div class="nav-text">
+                    <b>Panduan</b>
+                    <small>Petunjuk & alur quick start</small>
+                </div>
+            </button>
+
+            <button class="nav-item" data-page="about" title="Tentang - Informasi Tim & Aplikasi">
+                <span class="nav-icon">ℹ️</span>
+                <div class="nav-text">
+                    <b>Tentang</b>
+                    <small>Informasi tim & aplikasi</small>
+                </div>
+            </button>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <button class="theme-toggle-btn" id="themeBtn" onclick="toggleTheme()" title="Ubah Mode Tampilan">
+                <span id="themeIcon">🌙</span> <span id="themeText" class="theme-text">Mode Gelap</span>
+            </button>
+            <div class="sidebar-info">
+                <p>Matematika Diskrit</p>
+                <span>Kelompok C Project</span>
+            </div>
+        </div>
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main" id="mainContent">
+
+        <!-- TOPBAR -->
+        <header class="topbar">
+            <div>
+                <h1 id="pageTitle">Dashboard</h1>
+                <p id="pageSubTitle">Analisis himpunan data secara interaktif</p>
+            </div>
+
+            <div class="topbar-actions">
+                <select id="datasetSelect" onchange="switchDataset()" class="dataset-dropdown">
+                    <option value="ds1">Dataset 1: Mahasiswa (20 Data)</option>
+                    <option value="ds2">Dataset 2: Produk & Toko (20 Data)</option>
+                </select>
+
+                <button class="secondary-btn" onclick="exportPDFReport()" title="Cetak / Ekspor Laporan PDF">
+                    📄 Cetak Laporan PDF
+                </button>
+            </div>
+        </header>
+
+
+        <!-- DASHBOARD PAGE -->
+        <section class="page active" id="dashboard">
+
+            <div class="hero">
+                <div>
+                    <span class="badge">MATEMATIKA DISKRIT</span>
+                    <h2>Analisis Himpunan<br>Data Diskrit</h2>
+                    <p>Kelompokkan dataset berdasarkan kriteria tertentu dan lakukan operasi himpunan serta kalkulasi inklusi-eksklusi secara otomatis.</p>
+                    <button class="primary-btn" onclick="showPage('sets')">Mulai Analisis →</button>
+                </div>
+
+                <div class="hero-symbol">
+                    A ∪ B<br><span>∩</span><br>A − B
+                </div>
+            </div>
+
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-icon blue">👥</div>
+                    <div>
+                        <span>Total Semesta (U)</span>
+                        <strong id="totalStudents">20</strong>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon purple">A</div>
+                    <div>
+                        <span>Himpunan A</span>
+                        <strong id="totalA">0</strong>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon green">B</div>
+                    <div>
+                        <span>Himpunan B</span>
+                        <strong id="totalB">0</strong>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon orange">C</div>
+                    <div>
+                        <span>Himpunan C</span>
+                        <strong id="totalC">0</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <h3>Kriteria Himpunan</h3>
+                            <p>Aturan klasifikasi data aktif</p>
+                        </div>
+                    </div>
+
+                    <div class="criteria">
+                        <div class="criteria-item">
+                            <span class="circle purple">A</span>
+                            <div>
+                                <b id="critATitle">Kriteria A</b>
+                                <p id="critADesc">Nilai / Performa ≥ 80</p>
+                            </div>
+                        </div>
+
+                        <div class="criteria-item">
+                            <span class="circle green">B</span>
+                            <div>
+                                <b id="critBTitle">Kriteria B</b>
+                                <p id="critBDesc">Aktif Organisasi / Diskon Ya</p>
+                            </div>
+                        </div>
+
+                        <div class="criteria-item">
+                            <span class="circle orange">C</span>
+                            <div>
+                                <b id="critCTitle">Kriteria C</b>
+                                <p id="critCDesc">Kehadiran / Stok ≥ 80</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <h3>Akses Cepat Operasi</h3>
+                            <p>Operasi dasar interaktif</p>
+                        </div>
+                    </div>
+
+                    <div class="operations">
+                        <button onclick="quickOperation('union')">
+                            <b>A ∪ B</b>
+                            <span>Union</span>
+                        </button>
+
+                        <button onclick="quickOperation('intersection')">
+                            <b>A ∩ B</b>
+                            <span>Intersection</span>
+                        </button>
+
+                        <button onclick="quickOperation('difference')">
+                            <b>A − B</b>
+                            <span>Difference</span>
+                        </button>
+
+                        <button onclick="quickOperation('complement')">
+                            <b>Aᶜ</b>
+                            <span>Complement</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- DATA PAGE (DENGAN TOMBOL TAMBAH DATA) -->
+        <section class="page" id="data">
+
+            <div class="section-heading">
+                <div>
+                    <h2 id="dataPageHeading">Data Mahasiswa</h2>
+                    <p>Kelola data aktif yang digunakan dalam analisis himpunan.</p>
+                </div>
+
+                <button class="primary-btn" onclick="openModal()">
+                    + Tambah Data
+                </button>
+            </div>
+
+            <div class="card def-card">
+                <div class="def-header">
+                    <div class="def-header-title">
+                        <div class="def-icon-box">📋</div>
+                        <h3>Definisi Struktur Dataset & Aturan Keanggotaan Himpunan</h3>
+                    </div>
+                    <span class="def-record-badge" id="defRecordCount">20 Record Terdaftar</span>
+                </div>
+
+                <div class="def-grid">
+                    <div class="def-col">
+                        <h4 class="def-section-title">1. ATRIBUT & KOLOM DATASET</h4>
+                        <ul class="def-attr-list" id="defAttrList"></ul>
+                    </div>
+
+                    <div class="def-col">
+                        <h4 class="def-section-title">2. ATURAN KEANGGOTAAN DISKRIT</h4>
+                        <div class="def-rules-box" id="defRulesBox"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="table-tools">
+                    <input type="text" id="search" placeholder="Cari nama atau ID/NIM..." oninput="renderTable()">
+                    <button class="secondary-btn" onclick="resetData()">Reset Data</button>
+                </div>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>ID / NIM</th>
+                                <th>Nama</th>
+                                <th>Nilai / Atribut 1</th>
+                                <th>Kategori / Atribut 2</th>
+                                <th>Skor / Atribut 3</th>
+                                <th>Himpunan</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentTable"></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- SETS PAGE -->
+        <section class="page" id="sets">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Klasifikasi Himpunan & Semesta U</h2>
+                    <p>Daftar seluruh anggota himpunan dalam semesta pembicaraan.</p>
+                </div>
+            </div>
+
+            <div class="set-grid-4">
+                <div class="set-card set-u">
+                    <div class="set-title">
+                        <div class="set-letter letter-u">U</div>
+                        <div>
+                            <h3>Semesta (U)</h3>
+                            <p>Seluruh Elemen Data</p>
+                        </div>
+                    </div>
+                    <strong id="setUCount">0 data</strong>
+                    <div id="setUList" class="member-list"></div>
+                </div>
+
+                <div class="set-card set-a">
+                    <div class="set-title">
+                        <div class="set-letter letter-a">A</div>
+                        <div>
+                            <h3>Himpunan A</h3>
+                            <p id="setADescText">Atribut 1 ≥ 80</p>
+                        </div>
+                    </div>
+                    <strong id="setACount">0 data</strong>
+                    <div id="setAList" class="member-list"></div>
+                </div>
+
+                <div class="set-card set-b">
+                    <div class="set-title">
+                        <div class="set-letter letter-b">B</div>
+                        <div>
+                            <h3>Himpunan B</h3>
+                            <p id="setBDescText">Atribut 2 Aktif/Ya</p>
+                        </div>
+                    </div>
+                    <strong id="setBCount">0 data</strong>
+                    <div id="setBList" class="member-list"></div>
+                </div>
+
+                <div class="set-card set-c">
+                    <div class="set-title">
+                        <div class="set-letter letter-c">C</div>
+                        <div>
+                            <h3>Himpunan C</h3>
+                            <p id="setCDescText">Atribut 3 ≥ 80</p>
+                        </div>
+                    </div>
+                    <strong id="setCCount">0 data</strong>
+                    <div id="setCList" class="member-list"></div>
+                </div>
+            </div>
+
+            <div class="card op-calc-card">
+                <div class="section-heading-inner">
+                    <div>
+                        <h2>Operasi Himpunan</h2>
+                        <p class="sub-text">Pilih operasi dan himpunan, kemudian jalankan untuk melihat hasilnya.</p>
+                    </div>
+                </div>
+
+                <div class="op-form-box">
+                    <h3 class="op-box-title">Pilih Operasi</h3>
+
+                    <div class="op-form-group">
+                        <label>Jenis Operasi</label>
+                        <select id="opTypeSelect" onchange="handleOpTypeChange()">
+                            <option value="complement">Complement (Aᶜ)</option>
+                            <option value="union">Union (A ∪ B)</option>
+                            <option value="intersection">Intersection (A ∩ B)</option>
+                            <option value="difference">Difference (A − B)</option>
+                            <option value="sym_difference">Symmetric Difference (A ⊕ B)</option>
+                            <option value="union3">Union 3 Himpunan (A ∪ B ∪ C)</option>
+                            <option value="intersect3">Intersection 3 Himpunan (A ∩ B ∩ C)</option>
+                        </select>
+                    </div>
+
+                    <div class="op-form-group" id="opSet1Group">
+                        <label id="opSet1Label">Himpunan Target</label>
+                        <select id="opSet1Select" onchange="updateOpHint()">
+                            <option value="A">Himpunan A (Nilai Tinggi)</option>
+                            <option value="B">Himpunan B (Aktif Organisasi)</option>
+                            <option value="C">Himpunan C (Kehadiran Tinggi)</option>
+                        </select>
+                    </div>
+
+                    <div class="op-form-group" id="opSet2Group" style="display: none;">
+                        <label id="opSet2Label">Himpunan Kedua</label>
+                        <select id="opSet2Select" onchange="updateOpHint()">
+                            <option value="A">Himpunan A (Nilai Tinggi)</option>
+                            <option value="B" selected>Himpunan B (Aktif Organisasi)</option>
+                            <option value="C">Himpunan C (Kehadiran Tinggi)</option>
+                        </select>
+                    </div>
+
+                    <div class="op-hint-box" id="opFormulaHint">
+                        Komplemen dihitung terhadap Semesta U: Aᶜ = {x ∈ U | x ∉ A}
+                    </div>
+
+                    <button class="op-run-btn" onclick="executeSetOperation()">
+                        ⚡ Jalankan Operasi
+                    </button>
+                </div>
+            </div>
+
+            <div class="card op-result-card" id="opResultCard">
+                <div class="op-result-header">
+                    <div>
+                        <h2 id="opResTitle">Aᶜ</h2>
+                        <p id="opResSubtitle" class="sub-text">Complement — anggota Semesta U yang tidak ada di A</p>
+                    </div>
+
+                    <div class="op-result-actions">
+                        <span class="op-badge-percent" id="opResPercentBadge">7 elemen (35.0% Semesta)</span>
+                        <button class="op-action-btn" onclick="copyOpResult()">📋 Salin</button>
+                        <button class="op-action-btn" onclick="exportOpResultCSV()">↓ Export CSV</button>
+                        <button class="op-action-btn icon-only" onclick="resetOpResult()" title="Reset">↺</button>
+                    </div>
+                </div>
+
+                <div id="opResultMembersBox" class="op-result-body"></div>
+            </div>
+
+        </section>
+
+
+        <!-- DIAGRAM VENN PAGE -->
+        <section class="page" id="venn">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Diagram Venn</h2>
+                    <p>Visualisasi hubungan antarhimpunan.</p>
+                </div>
+            </div>
+
+            <div class="card venn-card">
+                <div class="venn">
+                    <div class="venn-circle venn-a"><span>A</span></div>
+                    <div class="venn-circle venn-b"><span>B</span></div>
+                    <div class="venn-circle venn-c"><span>C</span></div>
+
+                    <div class="venn-label label-ab">A ∩ B</div>
+                    <div class="venn-label label-ac">A ∩ C</div>
+                    <div class="venn-label label-bc">B ∩ C</div>
+                    <div class="venn-label label-abc">A ∩ B ∩ C</div>
+                </div>
+
+                <div class="venn-info">
+                    <h3>Jumlah Kardinalitas</h3>
+                    <div class="venn-stat"><span>Semesta Pembicaraan (|U|)</span><b id="vennU">0</b></div>
+                    <div class="venn-stat"><span>Himpunan A (|A|)</span><b id="vennA">0</b></div>
+                    <div class="venn-stat"><span>Himpunan B (|B|)</span><b id="vennB">0</b></div>
+                    <div class="venn-stat"><span>Himpunan C (|C|)</span><b id="vennC">0</b></div>
+                    <div class="venn-stat"><span>Irisan A ∩ B</span><b id="vennAB">0</b></div>
+                    <div class="venn-stat"><span>Irisan A ∩ C</span><b id="vennAC">0</b></div>
+                    <div class="venn-stat"><span>Irisan B ∩ C</span><b id="vennBC">0</b></div>
+                    <div class="venn-stat"><span>Irisan A ∩ B ∩ C</span><b id="vennABC">0</b></div>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- KALKULATOR PIE PAGE -->
+        <section class="page" id="pie">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Kalkulator PIE 2 dan 3 Himpunan</h2>
+                    <p>Hitung kardinalitas gabungan himpunan secara presisi beserta rincian langkah demi langkah (step-by-step breakdown).</p>
+                </div>
+                <div class="pie-semesta-box">
+                    Semesta U = <strong id="pieSemestaHeader">20</strong> Data
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>Pilih Mode Analisis PIE</h3>
+                    <div class="pie-toggle-group">
+                        <button id="btnPie2" class="pie-toggle-btn active" onclick="switchPieMode(2)">Mode 2 Himpunan</button>
+                        <button id="btnPie3" class="pie-toggle-btn" onclick="switchPieMode(3)">Mode 3 Himpunan</button>
+                    </div>
+                </div>
+
+                <div id="pieForm2" class="pie-form-grid">
+                    <label>
+                        Himpunan Pertama
+                        <select id="pieSelA2" onchange="runPieCalculator()">
+                            <option value="A" selected>Himpunan A</option>
+                            <option value="B">Himpunan B</option>
+                            <option value="C">Himpunan C</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Himpunan Kedua
+                        <select id="pieSelB2" onchange="runPieCalculator()">
+                            <option value="A">Himpunan A</option>
+                            <option value="B" selected>Himpunan B</option>
+                            <option value="C">Himpunan C</option>
+                        </select>
+                    </label>
+
+                    <button class="primary-btn" onclick="runPieCalculator()">Hitung PIE 2 Himpunan</button>
+                </div>
+
+                <div id="pieForm3" class="pie-form-grid" style="display: none;">
+                    <label>
+                        Himpunan Pertama
+                        <select id="pieSelA3" onchange="runPieCalculator()">
+                            <option value="A" selected>Himpunan A</option>
+                            <option value="B">Himpunan B</option>
+                            <option value="C">Himpunan C</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Himpunan Kedua
+                        <select id="pieSelB3" onchange="runPieCalculator()">
+                            <option value="A">Himpunan A</option>
+                            <option value="B" selected>Himpunan B</option>
+                            <option value="C">Himpunan C</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Himpunan Ketiga
+                        <select id="pieSelC3" onchange="runPieCalculator()">
+                            <option value="A">Himpunan A</option>
+                            <option value="B">Himpunan B</option>
+                            <option value="C" selected>Himpunan C</option>
+                        </select>
+                    </label>
+
+                    <button class="primary-btn" onclick="runPieCalculator()">Hitung PIE 3 Himpunan</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 id="pieResultTitle">PIE 2 Himpunan (|A ∪ B|)</h3>
+                    <span class="badge-blue" id="pieResultTag">|A ∪ B| = 0</span>
+                </div>
+
+                <div class="pie-formula-display" id="pieFormulaText">
+                    |A ∪ B| = |A| + |B| − |A ∩ B|
+                </div>
+
+                <div class="pie-steps-card">
+                    <div class="pie-steps-header">RINCIAN LANGKAH (STEP-BY-STEP BREAKDOWN)</div>
+                    <div id="pieStepsList" class="pie-steps-body"></div>
+                </div>
+
+                <div class="pie-card-footer">
+                    <span>Prinsip Inklusi-Eksklusi Diskrit</span>
+                    <span id="pieSemestaFooter">Semesta U: 20 Record</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h3 id="pieMembersHeading">Anggota Gabungan |A ∪ B|</h3>
+                        <p>Daftar elemen yang memenuhi gabungan himpunan terpilih.</p>
+                    </div>
+                    <button class="secondary-btn" onclick="exportPieCSV()">↓ Export Hasil PIE (CSV)</button>
+                </div>
+
+                <div id="pieMembersRows" class="pie-members-container"></div>
+            </div>
+
+        </section>
+
+
+        <!-- RIWAYAT KALKULASI PAGE -->
+        <section class="page" id="history">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Riwayat Kalkulasi & Log Aktivitas</h2>
+                    <p>Daftar riwayat operasi himpunan dan perhitungan PIE yang telah Anda lakukan selama sesi ini.</p>
+                </div>
+                <button class="secondary-btn" onclick="clearHistory()">🗑️ Hapus Riwayat</button>
+            </div>
+
+            <div class="card">
+                <div id="historyContainer" class="history-list-container">
+                    <!-- Dinamis via JS -->
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- GUIDE / PANDUAN PAGE -->
+        <section class="page" id="guide">
+
+            <div class="guide-banner-card">
+                <div class="guide-banner-content">
+                    <span class="guide-badge">📖 PANDUAN RESMI SETCLASSIFY</span>
+                    <h2>Panduan Penggunaan Sistem Klasifikasi SetClassify</h2>
+                    <p>
+                        Dokumentasi lengkap untuk memandu Anda memahami struktur data, pembentukan himpunan diskrit, 
+                        simulasi kalkulator operasi himpunan, diagram Venn interaktif, hingga prinsip Inklusi-Eksklusi (PIE).
+                    </p>
+                </div>
+                <button class="primary-btn guide-cta-btn" onclick="showPage('pie')">
+                    Coba Kalkulator PIE →
+                </button>
+            </div>
+
+            <div class="guide-quickstart-header">
+                <div>
+                    <h3>Alur Cepat (Quick Start)</h3>
+                    <p>4 langkah mudah menjalankan sistem klasifikasi data himpunan dari awal hingga akhir.</p>
+                </div>
+                <span class="qs-badge">4 Tahapan Inti</span>
+            </div>
+
+            <div class="guide-steps-grid">
+                <div class="guide-step-card">
+                    <div class="step-card-top">
+                        <span class="step-number">1</span>
+                        <span class="step-label">TAHAP 1</span>
+                    </div>
+                    <h4>Eksplorasi Dashboard</h4>
+                    <p>Amati kardinalitas total Semesta (U) serta ukuran himpunan bagian A, B, dan C. Periksa riwayat ringkas kalkulasi operasi himpunan terakhir.</p>
+                    <div class="step-card-footer">
+                        <span class="target-label">Target Fitur:</span>
+                        <a href="javascript:void(0)" onclick="showPage('dashboard')" class="step-link">Buka Dashboard →</a>
+                    </div>
+                </div>
+
+                <div class="guide-step-card">
+                    <div class="step-card-top">
+                        <span class="step-number">2</span>
+                        <span class="step-label">TAHAP 2</span>
+                    </div>
+                    <h4>Kelola Dataset (Toggle 1 / 2)</h4>
+                    <p>Ganti tipe dataset di topbar (Mahasiswa atau Produk Toko) dan tambah data baru dengan atribut dinamis sesuai kebutuhan.</p>
+                    <div class="step-card-footer">
+                        <span class="target-label">Target Fitur:</span>
+                        <a href="javascript:void(0)" onclick="showPage('data')" class="step-link">Buka Dataset →</a>
+                    </div>
+                </div>
+
+                <div class="guide-step-card">
+                    <div class="step-card-top">
+                        <span class="step-number">3</span>
+                        <span class="step-label">TAHAP 3</span>
+                    </div>
+                    <h4>Diagram Venn Interaktif</h4>
+                    <p>Pilih subset pasangan atau klik sektor diagram untuk menampilkan daftar elemen pada wilayah terpilih.</p>
+                    <div class="step-card-footer">
+                        <span class="target-label">Target Fitur:</span>
+                        <a href="javascript:void(0)" onclick="showPage('venn')" class="step-link">Buka Venn →</a>
+                    </div>
+                </div>
+
+                <div class="guide-step-card">
+                    <div class="step-card-top">
+                        <span class="step-number">4</span>
+                        <span class="step-label">TAHAP 4</span>
+                    </div>
+                    <h4>Inklusi–Eksklusi (PIE)</h4>
+                    <p>Jalankan perhitungan kalkulator PIE 2 dan 3 himpunan secara real-time dengan rincian langkah demi langkah.</p>
+                    <div class="step-card-footer">
+                        <span class="target-label">Target Fitur:</span>
+                        <a href="javascript:void(0)" onclick="showPage('pie')" class="step-link">Buka PIE →</a>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- ABOUT PAGE -->
+        <section class="page" id="about">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Tentang Aplikasi & Pengembang</h2>
+                    <p>Informasi sistem dan identitas tim pengembang.</p>
+                </div>
+            </div>
+
+            <div class="about-card">
+                <div class="about-logo">S</div>
+                <h2>SetClassify</h2>
+                <p>
+                    SetClassify adalah aplikasi web interaktif yang dikembangkan untuk mempermudah visualisasi dan kalkulasi 
+                    teori himpunan diskrit, kalkulator operasi kardinalitas, serta Prinsip Inklusi-Eksklusi (PIE).
+                </p>
+
+                <div class="team-section">
+                    <div class="team-header">
+                        <h3>👥 TIM PENGEMBANG — KELOMPOK C</h3>
+                        <p>Project Matematika Diskrit</p>
+                    </div>
+
+                    <div class="team-grid">
+                        <div class="team-member-card">
+                            <div class="member-avatar">AM</div>
+                            <div class="member-details">
+                                <b>Aris Mujas Fernanda</b>
+                                <span>NIM: 25210114</span>
+                            </div>
+                        </div>
+
+                        <div class="team-member-card">
+                            <div class="member-avatar">FP</div>
+                            <div class="member-details">
+                                <b>Fifian Putri Azhari</b>
+                                <span>NIM: 25210440</span>
+                            </div>
+                        </div>
+
+                        <div class="team-member-card">
+                            <div class="member-avatar">ZS</div>
+                            <div class="member-details">
+                                <b>Zalfa Sharfina Syifa</b>
+                                <span>NIM: 25210159</span>
+                            </div>
+                        </div>
+
+                        <div class="team-member-card">
+                            <div class="member-avatar">AP</div>
+                            <div class="member-details">
+                                <b>Ariandika Putra</b>
+                                <span>NIM: 25210041</span>
+                            </div>
+                        </div>
+
+                        <div class="team-member-card highlight-card">
+                            <div class="member-avatar">HA</div>
+                            <div class="member-details">
+                                <b>Hafizh Ash Shiddiqy</b>
+                                <span>NIM: 25210485</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="about-grid">
+                    <div><b>Teknologi</b><span>HTML5, CSS3, JavaScript ES6</span></div>
+                    <div><b>Mata Kuliah</b><span>Matematika Diskrit</span></div>
+                    <div><b>Fitur Unggulan</b><span>PIE 2 & 3, Operasi Himpunan, Venn, Export PDF/CSV</span></div>
+                    <div><b>Arsitektur UI</b><span>Responsive Light & Dark Mode</span></div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- MODAL TAMBAH DATA -->
+<div class="modal" id="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div>
+                <h2>Tambah Data Baru</h2>
+                <p>Masukkan atribut data ke dalam semesta.</p>
+            </div>
+            <button onclick="closeModal()">×</button>
+        </div>
+
+        <form id="studentForm">
+            <label>ID / NIM<input type="text" id="nim" required></label>
+            <label>Nama Lengkap<input type="text" id="nama" required></label>
+            <label>Atribut 1 (Nilai / Performa)<input type="number" id="nilai" min="0" max="100" required></label>
+            <label>Atribut 2 (Organisasi / Diskon)
+                <select id="organisasi">
+                    <option value="Ya">Ya</option>
+                    <option value="Tidak">Tidak</option>
+                </select>
+            </label>
+            <label>Atribut 3 (Kehadiran / Stok %)<input type="number" id="kehadiran" min="0" max="100" required></label>
+
+            <div class="form-buttons">
+                <button type="button" class="secondary-btn" onclick="closeModal()">Batal</button>
+                <button type="submit" class="primary-btn">Simpan Data</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
